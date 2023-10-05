@@ -2,8 +2,11 @@ package br.com.guedes.apartments.services;
 
 import br.com.guedes.apartments.dao.UserDAO;
 import br.com.guedes.apartments.models.UserRequest;
+import br.com.guedes.apartments.models.UserResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class UserService {
@@ -15,4 +18,7 @@ public class UserService {
         dao.insert(user);
     }
 
+    public List<UserRequest> getAllUsers() {
+        return dao.getAllUsers();
+    }
 }

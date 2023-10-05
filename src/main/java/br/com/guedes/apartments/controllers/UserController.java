@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -28,6 +30,13 @@ public class UserController {
         response.setMessage(Message.CREATED_USER.getDescription());
 
         return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
+    @RequestMapping(value = "/get_users", method = RequestMethod.GET)
+    public ResponseEntity<List<UserRequest>> getAll() {
+       List<UserRequest> list = userService.getAllUsers();
+
+       return ResponseEntity.ok().body(list);
     }
 
 }
