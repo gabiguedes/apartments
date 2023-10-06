@@ -2,7 +2,7 @@ package br.com.guedes.apartments.dao;
 
 import br.com.guedes.apartments.ConnectionFactory;
 import br.com.guedes.apartments.models.UserRequest;
-import br.com.guedes.apartments.models.enums.Role;
+import br.com.guedes.apartments.models.dto.UserResponse;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Connection;
@@ -43,9 +43,9 @@ public class UserDAO {
         }
     }
 
-    public List<UserRequest> getAllUsers() {
+    public List<UserResponse> getAllUsers() {
         Connection conn = connectionFactory.getConnection();
-        List<UserRequest> users = new ArrayList<>();
+        List<UserResponse> usersList = new ArrayList<>();
         String sql = "SELECT id, cpf, password, name, role FROM users";
 
         PreparedStatement preparedStatement = null;
@@ -53,8 +53,8 @@ public class UserDAO {
             preparedStatement = conn.prepareStatement(sql);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                UserRequest user = mapUser(resultSet);
-                users.add(user);
+                UserResponse user = mapUser(resultSet);
+                usersList.add(user);
             }
             preparedStatement.close();
             conn.close();
@@ -62,13 +62,13 @@ public class UserDAO {
             throw new RuntimeException("Error when searching for users", e);
         }
 
-        return users;
+        return usersList;
     }
 
-    public UserRequest findByName(String username) {
+    public UserResponse findByName(String username) {
         Connection conn = connectionFactory.getConnection();
         String sql = "SELECT id, cpf, name, password, role FROM users WHERE name = ?";
-        UserRequest userRequest = null;
+        UserResponse userResponse = null;
 
         PreparedStatement preparedStatement = null;
         try {
@@ -76,7 +76,7 @@ public class UserDAO {
             preparedStatement.setString(1, username);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                userRequest = mapUser(resultSet);
+                userResponse = mapUser(resultSet);
             }
 
             preparedStatement.close();
@@ -85,16 +85,15 @@ public class UserDAO {
             throw new RuntimeException("Error when searching for name user", e);
         }
 
-        return userRequest;
+        return userResponse;
     }
 
-    private UserRequest mapUser(ResultSet rs) throws SQLException {
-        UserRequest user = new UserRequest();
+    private UserResponse mapUser(ResultSet rs) throws SQLException {
+        UserResponse user = new UserResponse();
         user.setId(rs.getLong("id"));
         user.setCpf(rs.getString("cpf"));
         user.setName(rs.getString("name"));
-        user.setName(rs.getString("password"));
-        user.setName(rs.getString("role"));
+        user.setRole(rs.getString("role"));
         return user;
     }
 

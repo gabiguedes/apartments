@@ -2,7 +2,7 @@ package br.com.guedes.apartments.services;
 
 import br.com.guedes.apartments.dao.UserDAO;
 import br.com.guedes.apartments.models.UserRequest;
-import br.com.guedes.apartments.models.UserResponse;
+import br.com.guedes.apartments.models.dto.UserResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,11 +18,11 @@ public class UserService {
         dao.insert(user);
     }
 
-    public List<UserRequest> getAllUsers() {
+    public List<UserResponse> getAllUsers() {
         return dao.getAllUsers();
     }
 
-    public UserRequest findByName(String username) {
+    public UserResponse findByName(String username) {
        return dao.findByName(username);
     }
 

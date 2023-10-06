@@ -2,12 +2,12 @@ package br.com.guedes.apartments.models;
 
 import java.io.Serializable;
 
-public class UserResponse implements Serializable {
+public class DefaultResponse implements Serializable {
 
     private int code;
     private String message;
 
-    public UserResponse() {}
+    public DefaultResponse() {}
 
     public int getCode() {
         return code;
