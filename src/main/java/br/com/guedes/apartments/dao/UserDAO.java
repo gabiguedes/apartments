@@ -24,7 +24,7 @@ public class UserDAO {
     public void insert(UserRequest user) {
         Connection conn = connectionFactory.getConnection();
 
-        String sql = "INSERT INTO usuarios (cpf, name, password, role)" +
+        String sql = "INSERT INTO users (cpf, name, password, role)" +
                      "VALUES (?, ?, ?, ?)";
 
         PreparedStatement preparedStatement = null;
@@ -33,7 +33,7 @@ public class UserDAO {
             preparedStatement.setString(1, user.getCpf());
             preparedStatement.setString(2, user.getName());
             preparedStatement.setString(3, user.getPassword());
-            preparedStatement.setInt(4, Role.USER_NOOB.getCode());
+            preparedStatement.setString(4, user.getRole().name());
 
             preparedStatement.execute();
             preparedStatement.close();
@@ -46,7 +46,7 @@ public class UserDAO {
     public List<UserRequest> getAllUsers() {
         Connection conn = connectionFactory.getConnection();
         List<UserRequest> users = new ArrayList<>();
-        String sql = "SELECT id, cpf, name FROM usuarios";
+        String sql = "SELECT id, cpf, password, name, role FROM users";
 
         PreparedStatement preparedStatement = null;
         try {
@@ -65,11 +65,37 @@ public class UserDAO {
         return users;
     }
 
+    public UserRequest findByName(String username) {
+        Connection conn = connectionFactory.getConnection();
+        String sql = "SELECT id, cpf, name, password, role FROM users WHERE name = ?";
+        UserRequest userRequest = null;
+
+        PreparedStatement preparedStatement = null;
+        try {
+            preparedStatement = conn.prepareStatement(sql);
+            preparedStatement.setString(1, username);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                userRequest = mapUser(resultSet);
+            }
+
+            preparedStatement.close();
+            conn.close();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error when searching for name user", e);
+        }
+
+        return userRequest;
+    }
+
     private UserRequest mapUser(ResultSet rs) throws SQLException {
         UserRequest user = new UserRequest();
         user.setId(rs.getLong("id"));
         user.setCpf(rs.getString("cpf"));
         user.setName(rs.getString("name"));
+        user.setName(rs.getString("password"));
+        user.setName(rs.getString("role"));
         return user;
     }
+
 }
