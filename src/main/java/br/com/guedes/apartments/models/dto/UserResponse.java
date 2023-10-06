@@ -1,6 +1,7 @@
 package br.com.guedes.apartments.models.dto;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class UserResponse implements Serializable {
 
@@ -8,6 +9,8 @@ public class UserResponse implements Serializable {
     private String cpf;
     private String name;
     private String role;
+
+    private String creationOnDate;
 
     public UserResponse() {}
 
@@ -43,4 +46,11 @@ public class UserResponse implements Serializable {
         this.role = role;
     }
 
+    public String getCreationOnDate() {
+        return creationOnDate;
+    }
+
+    public void setCreationOnDate(String creationOnDate) {
+        this.creationOnDate = creationOnDate;
+    }
 }

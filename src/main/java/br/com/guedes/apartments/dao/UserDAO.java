@@ -9,7 +9,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -24,8 +26,8 @@ public class UserDAO {
     public void insert(UserRequest user) {
         Connection conn = connectionFactory.getConnection();
 
-        String sql = "INSERT INTO users (cpf, name, password, role)" +
-                     "VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO users (cpf, name, password, role, creation)" +
+                     "VALUES (?, ?, ?, ?, ?)";
 
         PreparedStatement preparedStatement = null;
         try {
@@ -34,6 +36,7 @@ public class UserDAO {
             preparedStatement.setString(2, user.getName());
             preparedStatement.setString(3, user.getPassword());
             preparedStatement.setString(4, user.getRole().name());
+            preparedStatement.setString(5, formatDate(new Date()));
 
             preparedStatement.execute();
             preparedStatement.close();
@@ -46,7 +49,7 @@ public class UserDAO {
     public List<UserResponse> getAllUsers() {
         Connection conn = connectionFactory.getConnection();
         List<UserResponse> usersList = new ArrayList<>();
-        String sql = "SELECT id, cpf, password, name, role FROM users";
+        String sql = "SELECT id, cpf, password, name, role, creation FROM users";
 
         PreparedStatement preparedStatement = null;
         try {
@@ -67,7 +70,7 @@ public class UserDAO {
 
     public UserResponse findByName(String username) {
         Connection conn = connectionFactory.getConnection();
-        String sql = "SELECT id, cpf, name, password, role FROM users WHERE name = ?";
+        String sql = "SELECT id, cpf, name, password, role, creation FROM users WHERE name = ?";
         UserResponse userResponse = null;
 
         PreparedStatement preparedStatement = null;
@@ -94,7 +97,14 @@ public class UserDAO {
         user.setCpf(rs.getString("cpf"));
         user.setName(rs.getString("name"));
         user.setRole(rs.getString("role"));
+        user.setCreationOnDate(rs.getString("creation"));
+
         return user;
+    }
+
+    private String formatDate(Date creation) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+        return dateFormat.format(creation.getTime());
     }
 
 }

@@ -3,6 +3,7 @@ package br.com.guedes.apartments.models;
 import br.com.guedes.apartments.models.enums.Role;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class UserRequest implements Serializable {
 
@@ -11,6 +12,9 @@ public class UserRequest implements Serializable {
     private String name;
     private String password;
     private Role role;
+
+    private Date creationOnDate;
+
     public UserRequest() {}
 
     public String getCpf() {
@@ -51,5 +55,13 @@ public class UserRequest implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Date getCreationOnDate() {
+        return creationOnDate;
+    }
+
+    public void setCreationOnDate(Date creationOnDate) {
+        this.creationOnDate = creationOnDate;
     }
 }
