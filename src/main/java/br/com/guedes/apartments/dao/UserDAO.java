@@ -36,7 +36,7 @@ public class UserDAO {
             preparedStatement.setString(2, user.getName());
             preparedStatement.setString(3, user.getPassword());
             preparedStatement.setString(4, user.getRole().name());
-            preparedStatement.setString(5, formatDate(new Date()));
+            preparedStatement.setString(5, dateFormatForDataBase(new Date()));
 
             preparedStatement.execute();
             preparedStatement.close();
@@ -46,7 +46,7 @@ public class UserDAO {
         }
     }
 
-    public List<UserResponse> getAllUsers() {
+    public List<UserResponse> selectAllUsers() {
         Connection conn = connectionFactory.getConnection();
         List<UserResponse> usersList = new ArrayList<>();
         String sql = "SELECT id, cpf, password, name, role, creation FROM users";
@@ -68,9 +68,9 @@ public class UserDAO {
         return usersList;
     }
 
-    public UserResponse findByName(String username) {
+    public UserResponse selectUserForName(String username) {
         Connection conn = connectionFactory.getConnection();
-        String sql = "SELECT id, cpf, name, password, role, creation FROM users WHERE name = ?";
+        String sql = "SELECT id, cpf, name, role, creation FROM users WHERE name = ?";
         UserResponse userResponse = null;
 
         PreparedStatement preparedStatement = null;
@@ -91,6 +91,29 @@ public class UserDAO {
         return userResponse;
     }
 
+    public UserResponse selectUserForCPF(String cpf) {
+        Connection conn = connectionFactory.getConnection();
+        String sql = "SELECT id, cpf, name, role, creation FROM users WHERE cpf = ?";
+        UserResponse userResponse = null;
+
+        PreparedStatement preparedStatement = null;
+        try {
+            preparedStatement = conn.prepareStatement(sql);
+            preparedStatement.setString(1, cpf);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                userResponse = mapUser(resultSet);
+            }
+
+            preparedStatement.close();
+            conn.close();
+        } catch (SQLException e) {
+            throw new RuntimeException("Error when searching for cpf user", e);
+        }
+
+        return userResponse;
+    }
+
     private UserResponse mapUser(ResultSet rs) throws SQLException {
         UserResponse user = new UserResponse();
         user.setId(rs.getLong("id"));
@@ -102,7 +125,7 @@ public class UserDAO {
         return user;
     }
 
-    private String formatDate(Date creation) {
+    private String dateFormatForDataBase(Date creation) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
         return dateFormat.format(creation.getTime());
     }

@@ -13,15 +13,15 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/api/users")
 public class UserController {
 
     @Autowired
     UserService userService;
 
-    @RequestMapping(value = "/insert", method = RequestMethod.POST)
-    public ResponseEntity<DefaultResponse> insert(@RequestBody UserRequest user) {
-        userService.insertUser(user);
+    @RequestMapping(value = "/register_user", method = RequestMethod.POST)
+    public ResponseEntity<DefaultResponse> registerUser(@RequestBody UserRequest user) {
+        userService.saveUser(user);
 
         DefaultResponse response = new DefaultResponse();
         response.setCode(HttpStatus.CREATED.value());
@@ -30,18 +30,25 @@ public class UserController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-    @RequestMapping(value = "/get_users", method = RequestMethod.GET)
-    public ResponseEntity<List<UserResponse>> getAll() {
+    @RequestMapping(value = "/get_all_users", method = RequestMethod.GET)
+    public ResponseEntity<List<UserResponse>> getAllUsers() {
        List<UserResponse> list = userService.getAllUsers();
 
        return ResponseEntity.ok().body(list);
     }
 
-    @RequestMapping(value = "/find/name/{name}", method = RequestMethod.GET)
+    @RequestMapping(value = "/get/name/{name}", method = RequestMethod.GET)
     public ResponseEntity<UserResponse> getByName(@PathVariable String name) {
-        UserResponse list = userService.findByName(name);
+        UserResponse userResponse = userService.findByName(name);
 
-        return ResponseEntity.ok().body(list);
+        return ResponseEntity.ok().body(userResponse);
+    }
+
+    @RequestMapping(value = "/get/cpf/{cpf}", method = RequestMethod.GET)
+    public ResponseEntity<UserResponse> getByCpf(@PathVariable String cpf) {
+        UserResponse userResponse = userService.findByCpf(cpf);
+
+        return ResponseEntity.ok().body(userResponse);
     }
 
 }

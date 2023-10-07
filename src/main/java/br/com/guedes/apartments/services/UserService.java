@@ -14,16 +14,20 @@ public class UserService {
     @Autowired
     UserDAO dao;
 
-    public void insertUser(UserRequest user) {
+    public void saveUser(UserRequest user) {
         dao.insert(user);
     }
 
     public List<UserResponse> getAllUsers() {
-        return dao.getAllUsers();
+        return dao.selectAllUsers();
     }
 
     public UserResponse findByName(String username) {
-       return dao.findByName(username);
+       return dao.selectUserForName(username);
+    }
+
+    public UserResponse findByCpf(String cpf) {
+        return dao.selectUserForCPF((cpf));
     }
 
 }
