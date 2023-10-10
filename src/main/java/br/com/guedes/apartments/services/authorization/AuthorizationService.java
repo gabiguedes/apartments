@@ -14,8 +14,7 @@ public class AuthorizationService implements UserDetailsService {
     UserDAO dao;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-       // return dao.findByName(cpf);
-        return null;
+    public UserDetails loadUserByUsername(String cpf) throws UsernameNotFoundException {
+        return dao.selectUserForCPF(cpf);
     }
 }

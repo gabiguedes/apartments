@@ -3,6 +3,7 @@ package br.com.guedes.apartments.controllers;
 import br.com.guedes.apartments.models.UserRequest;
 import br.com.guedes.apartments.models.DefaultResponse;
 import br.com.guedes.apartments.models.dto.UserResponse;
+import br.com.guedes.apartments.models.dto.UserSecurityDetails;
 import br.com.guedes.apartments.models.enums.Message;
 import br.com.guedes.apartments.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,8 +46,8 @@ public class UserController {
     }
 
     @RequestMapping(value = "/get/cpf/{cpf}", method = RequestMethod.GET)
-    public ResponseEntity<UserResponse> getByCpf(@PathVariable String cpf) {
-        UserResponse userResponse = userService.findByCpf(cpf);
+    public ResponseEntity<UserSecurityDetails> getByCpf(@PathVariable String cpf) {
+        UserSecurityDetails userResponse = userService.findByCpf(cpf);
 
         return ResponseEntity.ok().body(userResponse);
     }

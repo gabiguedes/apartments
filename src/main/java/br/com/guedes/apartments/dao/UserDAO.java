@@ -3,6 +3,8 @@ package br.com.guedes.apartments.dao;
 import br.com.guedes.apartments.ConnectionFactory;
 import br.com.guedes.apartments.models.UserRequest;
 import br.com.guedes.apartments.models.dto.UserResponse;
+import br.com.guedes.apartments.models.dto.UserSecurityDetails;
+import br.com.guedes.apartments.models.enums.Role;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Connection;
@@ -91,10 +93,10 @@ public class UserDAO {
         return userResponse;
     }
 
-    public UserResponse selectUserForCPF(String cpf) {
+    public UserSecurityDetails selectUserForCPF(String cpf) {
         Connection conn = connectionFactory.getConnection();
-        String sql = "SELECT id, cpf, name, role, creation FROM users WHERE cpf = ?";
-        UserResponse userResponse = null;
+        String sql = "SELECT id, cpf, password, role FROM users WHERE cpf = ?";
+        UserSecurityDetails userResponse = null;
 
         PreparedStatement preparedStatement = null;
         try {
@@ -102,7 +104,7 @@ public class UserDAO {
             preparedStatement.setString(1, cpf);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                userResponse = mapUser(resultSet);
+                userResponse = mapUserForUserDetails(resultSet);
             }
 
             preparedStatement.close();
@@ -125,9 +127,32 @@ public class UserDAO {
         return user;
     }
 
+    private UserSecurityDetails mapUserForUserDetails(ResultSet rs) throws SQLException {
+        UserSecurityDetails userSecurityDetails = new UserSecurityDetails();
+        userSecurityDetails.setId(rs.getLong("id"));
+        userSecurityDetails.setCpf(rs.getString("cpf"));
+        userSecurityDetails.setPassword(rs.getString("password"));
+        String roleString = rs.getString("role");
+        Role role = convertStringToRole(roleString);
+        userSecurityDetails.setRole(role);
+
+        return userSecurityDetails;
+    }
+
     private String dateFormatForDataBase(Date creation) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
         return dateFormat.format(creation.getTime());
+    }
+
+    private Role convertStringToRole(String roleString) {
+        if (roleString != null) {
+            if (roleString.equals("ROLE_ADMIN_SUPREME")) {
+                return Role.ADMIN_SUPREME;
+            } else if (roleString.equals("ROLE_USER_NOOB")) {
+                return Role.USER_NOOB;
+            }
+        }
+        return Role.USER_NOOB;
     }
 
 }
