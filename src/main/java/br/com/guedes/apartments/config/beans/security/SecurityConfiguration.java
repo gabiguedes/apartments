@@ -1,5 +1,6 @@
 package br.com.guedes.apartments.config.beans.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -11,6 +12,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -19,6 +21,9 @@ public class SecurityConfiguration {
     private static final String[] PUBLIC_MATCHERS = {};
     private static final String[] PUBLIC_MATCHERS_GET = {};
     private static final String[] PUBLIC_MATCHERS_POST = {"/auth/**"};
+
+    @Autowired
+    SecurityFilter securityFilter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
@@ -30,6 +35,7 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.POST, "/api").hasRole("ADMIN_SUPREME")
                         .anyRequest().authenticated()
                 )
+                .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 

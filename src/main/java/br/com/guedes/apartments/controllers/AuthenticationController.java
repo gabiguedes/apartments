@@ -1,5 +1,7 @@
 package br.com.guedes.apartments.controllers;
 
+import br.com.guedes.apartments.config.beans.security.TokenGenerateService;
+import br.com.guedes.apartments.models.dto.AuthResponse;
 import br.com.guedes.apartments.models.dto.AuthenticationDTO;
 import br.com.guedes.apartments.models.dto.RegisterDTO;
 import br.com.guedes.apartments.models.dto.UserSecurityDetails;
@@ -24,16 +26,16 @@ public class AuthenticationController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    TokenGenerateService tokenGenerateService;
+
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public ResponseEntity login(@RequestBody AuthenticationDTO authentication) {
-        System.out.println("entrei auqi");
         var cpfPassword = new UsernamePasswordAuthenticationToken(authentication.cpf(), authentication.password());
-        System.out.println("senha: " + cpfPassword);
         var auth = this.authenticationManager.authenticate(cpfPassword);
-        System.out.println("auth " + auth);
-        System.out.println("authenticated");
 
-        return ResponseEntity.ok().build();
+        var token = tokenGenerateService.generateToken((UserSecurityDetails) auth.getPrincipal());
+        return ResponseEntity.ok(new AuthResponse(token));
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
