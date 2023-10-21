@@ -2,8 +2,8 @@ package br.com.guedes.apartments.models.enums;
 
 public enum Message {
 
-    CREATED_USER(201, "SUCCESSFULLY REGISTERED USER");
-
+    CREATED_USER(201, "SUCCESSFULLY REGISTERED USER"),
+    DUPLICATED_KEY(409, "CPF already registered");
     private final int code;
     private final String description;
 

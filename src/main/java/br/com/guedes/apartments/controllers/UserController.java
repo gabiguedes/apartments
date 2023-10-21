@@ -1,15 +1,14 @@
 package br.com.guedes.apartments.controllers;
 
-import br.com.guedes.apartments.models.UserRequest;
-import br.com.guedes.apartments.models.DefaultResponse;
 import br.com.guedes.apartments.models.dto.UserResponse;
 import br.com.guedes.apartments.models.dto.UserSecurityDetails;
-import br.com.guedes.apartments.models.enums.Message;
 import br.com.guedes.apartments.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -19,17 +18,6 @@ public class UserController {
 
     @Autowired
     UserService userService;
-
-    @RequestMapping(value = "/register_user", method = RequestMethod.POST)
-    public ResponseEntity<DefaultResponse> registerUser(@RequestBody UserRequest user) {
-        userService.saveUser(user);
-
-        DefaultResponse response = new DefaultResponse();
-        response.setCode(HttpStatus.CREATED.value());
-        response.setMessage(Message.CREATED_USER.getDescription());
-
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
-    }
 
     @RequestMapping(value = "/get_all_users", method = RequestMethod.GET)
     public ResponseEntity<List<UserResponse>> getAllUsers() {
