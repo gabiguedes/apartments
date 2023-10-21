@@ -1,10 +1,10 @@
 package br.com.guedes.apartments.controllers;
 
 import br.com.guedes.apartments.config.beans.security.TokenGenerateService;
-import br.com.guedes.apartments.models.dto.DefaultResponseDTO;
-import br.com.guedes.apartments.models.dto.AuthResponse;
-import br.com.guedes.apartments.models.dto.AuthenticationDTO;
-import br.com.guedes.apartments.models.dto.RegisterDTO;
+import br.com.guedes.apartments.models.dto.responses.DefaultResponseDTO;
+import br.com.guedes.apartments.models.dto.responses.LoginTokenResponseDTO;
+import br.com.guedes.apartments.models.dto.requests.RequestLoginDTO;
+import br.com.guedes.apartments.models.dto.requests.RequestRegisterDTO;
 import br.com.guedes.apartments.models.dto.UserSecurityDetails;
 import br.com.guedes.apartments.models.enums.Message;
 import br.com.guedes.apartments.services.UserService;
@@ -30,19 +30,22 @@ public class AuthenticationController {
     private UserService userService;
 
     @Autowired
-    TokenGenerateService tokenGenerateService;
+    private TokenGenerateService tokenGenerateService;
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public ResponseEntity login(@RequestBody AuthenticationDTO authentication) {
+    public ResponseEntity<LoginTokenResponseDTO> login(@RequestBody RequestLoginDTO authentication) {
         var cpfPassword = new UsernamePasswordAuthenticationToken(authentication.cpf(), authentication.password());
         var auth = this.authenticationManager.authenticate(cpfPassword);
 
         var token = tokenGenerateService.generateToken((UserSecurityDetails) auth.getPrincipal());
-        return ResponseEntity.ok(new AuthResponse(token));
+        return new ResponseEntity<>(new LoginTokenResponseDTO(
+                token,
+                Message.LOGIN_AUTHENTICATED.getDescription()),
+                HttpStatus.OK);
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
-    public ResponseEntity<DefaultResponseDTO> register(@RequestBody RegisterDTO registerDTO) {
+    public ResponseEntity<DefaultResponseDTO> register(@RequestBody RequestRegisterDTO registerDTO) {
         UserSecurityDetails user = userService.findByCpf(registerDTO.cpf());
         if(user != null && user.getCpf() != null) {
             return new ResponseEntity<>(new DefaultResponseDTO(

@@ -2,7 +2,6 @@ package br.com.guedes.apartments.dao;
 
 import br.com.guedes.apartments.ConnectionFactory;
 import br.com.guedes.apartments.models.UserRequest;
-import br.com.guedes.apartments.models.dto.RegisterDTO;
 import br.com.guedes.apartments.models.dto.UserResponse;
 import br.com.guedes.apartments.models.dto.UserSecurityDetails;
 import br.com.guedes.apartments.models.enums.Role;
