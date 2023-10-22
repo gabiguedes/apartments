@@ -1,7 +1,6 @@
 package br.com.guedes.apartments.controllers;
 
 import br.com.guedes.apartments.models.dto.responses.UserFetcherDTO;
-import br.com.guedes.apartments.models.dto.authorization.UserSecurityDetails;
 import br.com.guedes.apartments.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -30,13 +29,6 @@ public class UserController {
     @RequestMapping(value = "/get/name/{name}", method = RequestMethod.GET)
     public ResponseEntity<UserFetcherDTO> getByName(@PathVariable String name) {
         UserFetcherDTO userResponse = userService.findByName(name);
-
-        return ResponseEntity.ok().body(userResponse);
-    }
-
-    @RequestMapping(value = "/get/cpf/{cpf}", method = RequestMethod.GET)
-    public ResponseEntity<UserSecurityDetails> getByCpf(@PathVariable String cpf) {
-        UserSecurityDetails userResponse = userService.findByCpf(cpf);
 
         return ResponseEntity.ok().body(userResponse);
     }

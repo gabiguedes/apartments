@@ -92,10 +92,9 @@ public class UserDAO {
         return userResponse;
     }
 
-    //TODO refatorar, fazer outro metodo de fetch para usar na buca de passowrd and cpf para jwt token
     public UserSecurityDetails selectUserForCPF(String cpf) {
         Connection conn = connectionFactory.getConnection();
-        String sql = "SELECT id, cpf, password, role, name, creation FROM users WHERE cpf = ?";
+        String sql = "SELECT cpf, password, role FROM users WHERE cpf = ?";
         UserSecurityDetails userResponse = null;
 
         PreparedStatement preparedStatement = null;
@@ -127,11 +126,8 @@ public class UserDAO {
 
     private UserSecurityDetails mapUserForUserDetails(ResultSet rs) throws SQLException {
         UserSecurityDetails userSecurityDetails = new UserSecurityDetails();
-        userSecurityDetails.setId(rs.getLong("id"));
         userSecurityDetails.setCpf(rs.getString("cpf"));
         userSecurityDetails.setPassword(rs.getString("password"));
-        userSecurityDetails.setName(rs.getString("name"));
-        userSecurityDetails.setCreationOnDate(rs.getString("creation"));
         String roleString = rs.getString("role");
         Role role = convertStringToRole(roleString);
         userSecurityDetails.setRole(role);
