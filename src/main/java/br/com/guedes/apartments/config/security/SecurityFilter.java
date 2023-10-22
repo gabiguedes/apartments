@@ -1,7 +1,7 @@
-package br.com.guedes.apartments.config.beans.security;
+package br.com.guedes.apartments.config.security;
 
 import br.com.guedes.apartments.dao.UserDAO;
-import br.com.guedes.apartments.models.dto.UserSecurityDetails;
+import br.com.guedes.apartments.models.dto.authorization.UserSecurityDetails;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

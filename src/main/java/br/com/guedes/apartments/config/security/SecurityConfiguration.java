@@ -1,4 +1,4 @@
-package br.com.guedes.apartments.config.beans.security;
+package br.com.guedes.apartments.config.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

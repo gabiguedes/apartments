@@ -1,8 +1,8 @@
 package br.com.guedes.apartments.dao;
 
 import br.com.guedes.apartments.ConnectionFactory;
-import br.com.guedes.apartments.models.dto.UserResponse;
-import br.com.guedes.apartments.models.dto.UserSecurityDetails;
+import br.com.guedes.apartments.models.dto.responses.UserFetcherDTO;
+import br.com.guedes.apartments.models.dto.authorization.UserSecurityDetails;
 import br.com.guedes.apartments.models.enums.Role;
 import org.springframework.stereotype.Repository;
 
@@ -47,9 +47,9 @@ public class UserDAO {
         }
     }
 
-    public List<UserResponse> selectAllUsers() {
+    public List<UserFetcherDTO> selectAllUsers() {
         Connection conn = connectionFactory.getConnection();
-        List<UserResponse> usersList = new ArrayList<>();
+        List<UserFetcherDTO> usersList = new ArrayList<>();
         String sql = "SELECT id, cpf, password, name, role, creation FROM users";
 
         PreparedStatement preparedStatement = null;
@@ -57,7 +57,7 @@ public class UserDAO {
             preparedStatement = conn.prepareStatement(sql);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                UserResponse user = mapUser(resultSet);
+                UserFetcherDTO user = mapUser(resultSet);
                 usersList.add(user);
             }
             preparedStatement.close();
@@ -69,10 +69,10 @@ public class UserDAO {
         return usersList;
     }
 
-    public UserResponse selectUserForName(String username) {
+    public UserFetcherDTO selectUserForName(String username) {
         Connection conn = connectionFactory.getConnection();
         String sql = "SELECT id, cpf, name, role, creation FROM users WHERE name = ?";
-        UserResponse userResponse = null;
+        UserFetcherDTO userResponse = null;
 
         PreparedStatement preparedStatement = null;
         try {
@@ -92,9 +92,10 @@ public class UserDAO {
         return userResponse;
     }
 
+    //TODO refatorar, fazer outro metodo de fetch para usar na buca de passowrd and cpf para jwt token
     public UserSecurityDetails selectUserForCPF(String cpf) {
         Connection conn = connectionFactory.getConnection();
-        String sql = "SELECT id, cpf, password, role FROM users WHERE cpf = ?";
+        String sql = "SELECT id, cpf, password, role, name, creation FROM users WHERE cpf = ?";
         UserSecurityDetails userResponse = null;
 
         PreparedStatement preparedStatement = null;
@@ -115,15 +116,13 @@ public class UserDAO {
         return userResponse;
     }
 
-    private UserResponse mapUser(ResultSet rs) throws SQLException {
-        UserResponse user = new UserResponse();
-        user.setId(rs.getLong("id"));
-        user.setCpf(rs.getString("cpf"));
-        user.setName(rs.getString("name"));
-        user.setRole(rs.getString("role"));
-        user.setCreationOnDate(rs.getString("creation"));
-
-        return user;
+    private UserFetcherDTO mapUser(ResultSet rs) throws SQLException {
+        return new UserFetcherDTO(
+                rs.getLong("id"),
+                rs.getString("cpf"),
+                rs.getString("name"),
+                rs.getString("role"),
+                rs.getString("creation"));
     }
 
     private UserSecurityDetails mapUserForUserDetails(ResultSet rs) throws SQLException {
@@ -131,6 +130,8 @@ public class UserDAO {
         userSecurityDetails.setId(rs.getLong("id"));
         userSecurityDetails.setCpf(rs.getString("cpf"));
         userSecurityDetails.setPassword(rs.getString("password"));
+        userSecurityDetails.setName(rs.getString("name"));
+        userSecurityDetails.setCreationOnDate(rs.getString("creation"));
         String roleString = rs.getString("role");
         Role role = convertStringToRole(roleString);
         userSecurityDetails.setRole(role);

@@ -1,11 +1,11 @@
 package br.com.guedes.apartments.controllers;
 
-import br.com.guedes.apartments.config.beans.security.TokenGenerateService;
+import br.com.guedes.apartments.config.security.TokenGenerateService;
 import br.com.guedes.apartments.models.dto.responses.DefaultResponseDTO;
 import br.com.guedes.apartments.models.dto.responses.LoginTokenResponseDTO;
 import br.com.guedes.apartments.models.dto.requests.RequestLoginDTO;
 import br.com.guedes.apartments.models.dto.requests.RequestRegisterDTO;
-import br.com.guedes.apartments.models.dto.UserSecurityDetails;
+import br.com.guedes.apartments.models.dto.authorization.UserSecurityDetails;
 import br.com.guedes.apartments.models.enums.Message;
 import br.com.guedes.apartments.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

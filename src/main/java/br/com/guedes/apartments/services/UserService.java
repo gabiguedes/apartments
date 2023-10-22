@@ -1,8 +1,8 @@
 package br.com.guedes.apartments.services;
 
 import br.com.guedes.apartments.dao.UserDAO;
-import br.com.guedes.apartments.models.dto.UserResponse;
-import br.com.guedes.apartments.models.dto.UserSecurityDetails;
+import br.com.guedes.apartments.models.dto.responses.UserFetcherDTO;
+import br.com.guedes.apartments.models.dto.authorization.UserSecurityDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,11 +18,11 @@ public class UserService {
         dao.insertAuthenticationRegisterUser(user);
     }
 
-    public List<UserResponse> getAllUsers() {
+    public List<UserFetcherDTO> getAllUsers() {
         return dao.selectAllUsers();
     }
 
-    public UserResponse findByName(String username) {
+    public UserFetcherDTO findByName(String username) {
        return dao.selectUserForName(username);
     }
 

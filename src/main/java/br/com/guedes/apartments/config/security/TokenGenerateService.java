@@ -1,6 +1,6 @@
-package br.com.guedes.apartments.config.beans.security;
+package br.com.guedes.apartments.config.security;
 
-import br.com.guedes.apartments.models.dto.UserSecurityDetails;
+import br.com.guedes.apartments.models.dto.authorization.UserSecurityDetails;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;

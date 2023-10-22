@@ -1,4 +1,4 @@
-package br.com.guedes.apartments.models.dto;
+package br.com.guedes.apartments.models.dto.authorization;
 
 import br.com.guedes.apartments.models.enums.Role;
 import org.springframework.security.core.GrantedAuthority;
@@ -10,6 +10,8 @@ import java.util.List;
 
 public class UserSecurityDetails implements UserDetails {
 
+
+    //TOOD usar UUID, vamos refatorar aqui tbm
     private Long id;
     private String cpf;
     private String name;
