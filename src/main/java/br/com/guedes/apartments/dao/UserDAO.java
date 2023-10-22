@@ -1,7 +1,6 @@
 package br.com.guedes.apartments.dao;
 
 import br.com.guedes.apartments.ConnectionFactory;
-import br.com.guedes.apartments.models.UserRequest;
 import br.com.guedes.apartments.models.dto.UserResponse;
 import br.com.guedes.apartments.models.dto.UserSecurityDetails;
 import br.com.guedes.apartments.models.enums.Role;
@@ -25,11 +24,11 @@ public class UserDAO {
         this.connectionFactory = new ConnectionFactory();
     }
 
-    public void insert(UserRequest user) {
+    public void insertAuthenticationRegisterUser(UserSecurityDetails user) {
         Connection conn = connectionFactory.getConnection();
 
         String sql = "INSERT INTO users (cpf, name, password, role, creation)" +
-                     "VALUES (?, ?, ?, ?, ?)";
+                "VALUES (?, ?, ?, ?, ?)";
 
         PreparedStatement preparedStatement = null;
         try {
@@ -39,28 +38,6 @@ public class UserDAO {
             preparedStatement.setString(3, user.getPassword());
             preparedStatement.setString(4, user.getRole().name());
             preparedStatement.setString(5, dateFormatForDataBase(new Date()));
-
-            preparedStatement.execute();
-            preparedStatement.close();
-            conn.close();
-        } catch (SQLException e) {
-            throw new RuntimeException("The insert query has something wrong", e);
-        }
-    }
-
-    public void insertAuthentication(UserSecurityDetails user) {
-        Connection conn = connectionFactory.getConnection();
-
-        String sql = "INSERT INTO users (cpf, password, role)" +
-                "VALUES (?, ?, ?)";
-
-        PreparedStatement preparedStatement = null;
-        try {
-            preparedStatement = conn.prepareStatement(sql);
-            preparedStatement.setString(1, user.getCpf());
-            preparedStatement.setString(2, user.getPassword());
-            preparedStatement.setString(3, user.getRole().name());
-           //preparedStatement.setString(5, dateFormatForDataBase(new Date()));
 
             preparedStatement.execute();
             preparedStatement.close();

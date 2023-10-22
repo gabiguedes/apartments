@@ -1,7 +1,6 @@
 package br.com.guedes.apartments.services;
 
 import br.com.guedes.apartments.dao.UserDAO;
-import br.com.guedes.apartments.models.UserRequest;
 import br.com.guedes.apartments.models.dto.UserResponse;
 import br.com.guedes.apartments.models.dto.UserSecurityDetails;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,12 +14,8 @@ public class UserService {
     @Autowired
     UserDAO dao;
 
-    public void saveUser(UserRequest user) {
-        dao.insert(user);
-    }
-
     public void saveUserAuthentication(UserSecurityDetails user) {
-        dao.insertAuthentication(user);
+        dao.insertAuthenticationRegisterUser(user);
     }
 
     public List<UserResponse> getAllUsers() {

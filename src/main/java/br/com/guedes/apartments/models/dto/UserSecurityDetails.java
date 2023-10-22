@@ -12,15 +12,19 @@ public class UserSecurityDetails implements UserDetails {
 
     private Long id;
     private String cpf;
+    private String name;
     private String password;
     private Role role;
+    private String creationOnDate;
 
     public UserSecurityDetails() {}
 
-    public UserSecurityDetails(String cpf, String bcryptopPassword, Role role) {
+    public UserSecurityDetails(String cpf, String encryptedPassword, Role role, String name, String creationOnDate) {
         this.cpf = cpf;
-        this.password = bcryptopPassword;
+        this.password = encryptedPassword;
         this.role = role;
+        this.name = name;
+        this.creationOnDate = creationOnDate;
     }
 
     @Override
@@ -78,6 +82,14 @@ public class UserSecurityDetails implements UserDetails {
         this.cpf = cpf;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public void setPassword(String password) {
         this.password = password;
     }
@@ -88,5 +100,13 @@ public class UserSecurityDetails implements UserDetails {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public String getCreationOnDate() {
+        return creationOnDate;
+    }
+
+    public void setCreationOnDate(String creationOnDate) {
+        this.creationOnDate = creationOnDate;
     }
 }

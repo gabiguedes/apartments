@@ -55,7 +55,12 @@ public class AuthenticationController {
        }
 
         String encryptedPassword = new BCryptPasswordEncoder().encode(registerDTO.password());
-        UserSecurityDetails newUser = new UserSecurityDetails(registerDTO.cpf(), encryptedPassword, registerDTO.role());
+        UserSecurityDetails newUser = new UserSecurityDetails(
+                registerDTO.cpf(),
+                encryptedPassword,
+                registerDTO.role(),
+                registerDTO.name(),
+                registerDTO.creationOnDate());
         userService.saveUserAuthentication(newUser);
 
         return new ResponseEntity<>(new DefaultResponseDTO(
