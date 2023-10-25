@@ -21,6 +21,8 @@ public class SecurityConfiguration {
     private static final String[] PUBLIC_MATCHERS = {};
     private static final String[] PUBLIC_MATCHERS_GET = {};
     private static final String[] PUBLIC_MATCHERS_POST = {"/auth/**"};
+    private static final String[] ADMIN_PRIVATE_MATCHERS_GET = {"/api/admin/**"};
+    private final String ROLE_ADMIN = "ADMIN_SUPREME";
 
     @Autowired
     SecurityFilter securityFilter;
@@ -32,7 +34,7 @@ public class SecurityConfiguration {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST, PUBLIC_MATCHERS_POST).permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api").hasRole("ADMIN_SUPREME")
+                        .requestMatchers(HttpMethod.GET, ADMIN_PRIVATE_MATCHERS_GET).hasRole(ROLE_ADMIN)
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)

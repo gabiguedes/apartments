@@ -28,7 +28,7 @@ public class SecurityFilter extends OncePerRequestFilter {
         String token = this.recoverToken(request);
         if(token != null) {
             String cpf = tokenGenerateService.validateToken(token);
-            UserSecurityDetails user = userDAO.selectUserForCPF(cpf);
+            UserSecurityDetails user = userDAO.selectUserDetailsForCPF(cpf);
 
             var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);

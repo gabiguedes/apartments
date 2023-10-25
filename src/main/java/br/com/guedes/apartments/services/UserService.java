@@ -18,16 +18,8 @@ public class UserService {
         dao.insertAuthenticationRegisterUser(user);
     }
 
-    public List<UserFetcherDTO> getAllUsers() {
-        return dao.selectAllUsers();
-    }
-
-    public UserFetcherDTO findByName(String username) {
-       return dao.selectUserForName(username);
-    }
-
     public UserSecurityDetails findByCpf(String cpf) {
-        return dao.selectUserForCPF((cpf));
+        return dao.selectUserDetailsForCPF((cpf));
     }
 
 }

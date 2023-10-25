@@ -1,4 +1,4 @@
-package br.com.guedes.apartments.models.dto.requests;
+package br.com.guedes.apartments.models.dto.authorization;
 
 import br.com.guedes.apartments.models.enums.Role;
 
