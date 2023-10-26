@@ -12,7 +12,7 @@
 
 	<groupId>br.com.guedes</groupId>
 	<artifactId>apartments</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1</version>
 	<packaging>war</packaging>
 	<name>apartments</name>
 	<description>Project for apartments</description>
