@@ -10,9 +10,7 @@ import java.util.List;
 
 public class UserSecurityDetails implements UserDetails {
 
-
-    //TOOD usar UUID, vamos refatorar aqui tbm
-    private Long id;
+    private String id;
     private String cpf;
     private String name;
     private String password;
@@ -68,11 +66,11 @@ public class UserSecurityDetails implements UserDetails {
         return true;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
