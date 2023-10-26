@@ -8,6 +8,8 @@ import br.com.guedes.apartments.models.dto.authorization.RequestRegisterDTO;
 import br.com.guedes.apartments.models.dto.authorization.UserSecurityDetails;
 import br.com.guedes.apartments.models.enums.Message;
 import br.com.guedes.apartments.services.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +25,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/auth")
 public class AuthenticationController {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(AuthenticationController.class);
+
     @Autowired
     private AuthenticationManager authenticationManager;
 
@@ -36,8 +40,10 @@ public class AuthenticationController {
     public ResponseEntity<LoginTokenResponseDTO> login(@RequestBody RequestLoginDTO authentication) {
         var cpfPassword = new UsernamePasswordAuthenticationToken(authentication.cpf(), authentication.password());
         var auth = this.authenticationManager.authenticate(cpfPassword);
+        LOGGER.info("authenticated user " + auth.isAuthenticated());
 
         var token = tokenGenerateService.generateToken((UserSecurityDetails) auth.getPrincipal());
+        LOGGER.info("successfully generated token");
         return new ResponseEntity<>(new LoginTokenResponseDTO(
                 token,
                 Message.LOGIN_AUTHENTICATED.getDescription()),
@@ -62,6 +68,7 @@ public class AuthenticationController {
                 registerDTO.name(),
                 registerDTO.creationOnDate());
         userService.saveUserAuthentication(newUser);
+        LOGGER.info("User forwarded to database");
 
         return new ResponseEntity<>(new DefaultResponseDTO(
                 HttpStatus.CREATED.value(),

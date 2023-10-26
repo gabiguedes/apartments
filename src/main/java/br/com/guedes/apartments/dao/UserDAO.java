@@ -3,6 +3,8 @@ package br.com.guedes.apartments.dao;
 import br.com.guedes.apartments.ConnectionFactory;
 import br.com.guedes.apartments.models.dto.authorization.UserSecurityDetails;
 import br.com.guedes.apartments.models.enums.Role;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Connection;
@@ -14,6 +16,8 @@ import java.util.Date;
 
 @Repository
 public class UserDAO {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserDAO.class);
 
     private final ConnectionFactory connectionFactory;
 
@@ -37,6 +41,7 @@ public class UserDAO {
             preparedStatement.setString(5, dateFormatForDataBase(new Date()));
 
             preparedStatement.execute();
+            LOGGER.info("User successfully saved in the database");
             preparedStatement.close();
             conn.close();
         } catch (SQLException e) {
@@ -58,6 +63,7 @@ public class UserDAO {
                 userResponse = mapUserForUserDetails(resultSet);
             }
 
+            LOGGER.info("CPF successfully recovered");
             preparedStatement.close();
             conn.close();
         } catch (SQLException e) {
